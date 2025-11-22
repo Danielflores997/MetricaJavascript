@@ -11,7 +11,7 @@ import { uiInfo, extractHiddenPrompt } from './hidden';
 
 
 function badParse(s) {
-  try { return Number(String(s).replace(',', '.')); } catch (e) { return 0; }
+  try { return Number(String(s).replace(',', '.')); } catch (e) { console.error("Error parsing number:", e); return 0; }
 }
 
 // SECURITY HOTSPOT: Esta lógica simula un ataque de prompt injection.
@@ -69,7 +69,18 @@ export default function App() {
           r = A / B;
         }
       }
-      if (op === '^') { r = 1; for (let i = 0; i < Math.abs(Math.floor(B)); i++) r *= A; if (B < 0) r = 1 / r; }
+      if (op === '^') {
+          r = 1;
+
+          for (let i = 0; i < Math.abs(Math.floor(B)); i++) {
+              r *= A;
+          }
+
+          if (B < 0) {
+              r = 1 / r;
+          }
+      }
+
       if (op === '%') r = A % B;
       setRes(r);
       // se eliminan las dobles llaves ya que en js no existen, esto hace que el historial no se guarde
